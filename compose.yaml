@@ -1,10 +1,27 @@
+version: "3.7"
 services:
-  mysql:
-    image: 'mysql:latest'
-    environment:
-      - 'MYSQL_DATABASE=mydatabase'
-      - 'MYSQL_PASSWORD=secret'
-      - 'MYSQL_ROOT_PASSWORD=verysecret'
-      - 'MYSQL_USER=myuser'
+  api_service:
+    image: "spring-boot-dc3:v1"
+    build: .
+    restart: always
     ports:
-      - '3306'
+      - 8080:8080
+    networks:
+      - sliit_lk_network
+    depends_on:
+      - mysqldb
+
+  mysqldb:
+    image: 'mysql:latest'
+    container_name: "mysql-service"
+    restart: always
+    ports:
+      - 3306:3306
+    networks:
+      - sliit_lk_network
+    environment:
+      MYSQL_ROOT_PASSWORD: root@123
+networks:
+  sliit_lk_network:
+
+
